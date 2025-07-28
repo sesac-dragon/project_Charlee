@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  cointradesystem:
+    build: .
+    container_name: cointradesystem
+    env_file:
+      - ./.env
+    environment:
+      PYTHONPATH: /usr/src/app
+      PYTHONUNBUFFERED: 1
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: always
+
+  mariadb:
+    image: mariadb:10.6
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "3307:3306"
+    container_name: mariadb
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      TZ: Asia/Seoul
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: test1234
+      MARIADB_ROOT_PASSWORD: test1234
+      MARIADB_DATABASE: ${DB_NAME}
+    restart: always
