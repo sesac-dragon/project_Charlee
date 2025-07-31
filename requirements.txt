@@ -28,6 +28,7 @@ numpy==2.2.6
 packaging==25.0
 pandas==2.3.1
 pillow==11.3.0
+plotly
 protobuf==6.31.1
 pyarrow==21.0.0
 pydantic==2.11.7
@@ -63,3 +64,4 @@ urllib3==2.5.0
 uvicorn==0.35.0
 watchdog==6.0.0
 APScheduler==3.10.0
+docker==7.1.0

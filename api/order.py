@@ -103,3 +103,34 @@ def cancel_orders_by_uuids(uuid_list):
             return {}  # ✅ 로그 생략
     except Exception:
         return {}  # ✅ 로그 생략
+
+
+def get_orders(state: str, market: str = None) -> list:
+    """
+    주문 리스트를 조회합니다.
+
+    Args:
+        state (str): 주문 상태 (wait, done, cancel)
+        market (str, optional): 마켓 ID. Defaults to None.
+
+    Returns:
+        list: 주문 리스트
+    """
+    url = f"{config.SERVER_URL}/v1/orders"
+    query = {
+        "state": state,
+        "page": 1,
+        "limit": 100,
+        "order_by": "desc",
+    }
+    if market:
+        query["market"] = market
+
+    headers = {"Authorization": generate_jwt_token(copy.deepcopy(query))}
+
+    response = requests.get(url, params=query, headers=headers)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(f"❌ 주문 내역 조회 실패: {response.status_code} - {response.text}")

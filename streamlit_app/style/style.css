@@ -1,0 +1,126 @@
+/* =====================================================================================
+[파일 개요]
+이 파일은 Streamlit 대시보드의 시각적 스타일을 정의하는 CSS 파일입니다.
+가독성 문제를 해결하기 위해, 모든 텍스트 요소에 어두운 색상이 강제로
+적용되도록 수정되었습니다.
+
+[주요 변경사항]
+1. 강제 스타일 적용: body와 기본 p, li 태그에 `!important` 속성을 사용하여
+   Streamlit 기본 테마와의 충돌을 방지하고 텍스트 색상을 명확하게 지정했습니다.
+2. 가독성 확보: 배경은 밝게, 텍스트는 어둡게 표시되는 것을 보장하여
+   어떤 상황에서도 내용을 명확히 읽을 수 있도록 수정했습니다.
+===================================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* --- 1. CSS 변수 및 기본 설정 --- */
+:root {
+    --primary-color: #4A6A4F; /* 깊고 차분한 녹색 */
+    --secondary-color: #76B47A; /* 부드러운 녹색 */
+    --accent-color: #D4A373; /* 포인트 브라운 */
+    --background-color: #FDFCFB; /* 거의 흰색에 가까운 따뜻한 배경 */
+    --card-background-color: #FFFFFF;
+    --text-color: #333333; /* **가장 중요한 기본 텍스트 색상 (짙은 회색)** */
+    --subtext-color: #555555;
+    --border-color: #EAEAEA;
+    --font-family: 'Noto Sans KR', sans-serif;
+    --border-radius: 12px;
+    --box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* --- 2. 전역 스타일 강제 적용 --- */
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important; /* **기본 텍스트 색상을 강제로 지정** */
+}
+
+.stApp {
+    color: var(--text-color);
+}
+
+/* 일반 텍스트 요소들의 색상을 한 번 더 강제 지정하여 안정성 확보 */
+p, li, .stMarkdown, [data-testid="stMarkdownContainer"] p {
+    color: var(--text-color) !important;
+}
+
+
+/* --- 3. UI 컴포넌트 스타일 --- */
+
+/* 헤더 및 타이틀 */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color) !important; /* 헤더 색상도 강제 지정 */
+    font-weight: 700;
+}
+
+/* 사이드바 */
+[data-testid="stSidebar"] {
+    background-color: var(--card-background-color);
+    border-right: 1px solid var(--border-color);
+}
+
+/* 메트릭 카드 (요약 정보) */
+div[data-testid="stMetric"] {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: var(--box-shadow);
+    transition: all 0.2s ease-in-out;
+}
+
+div[data-testid="stMetric"]:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+div[data-testid="stMetricLabel"] {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--subtext-color);
+}
+
+/* 탭 디자인 */
+.stTabs [data-baseweb="tab-list"] {
+	border-bottom: 2px solid var(--border-color);
+    gap: 8px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    font-size: 1.05rem;
+    font-weight: 700;
+    background-color: transparent;
+    border-radius: 8px 8px 0 0;
+    color: var(--secondary-color);
+    padding: 12px 18px;
+    transition: all 0.2s ease;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: var(--secondary-color);
+    color: white !important; /* 이 부분은 배경이 어두우므로 흰색 유지 */
+}
+
+/* 알림창 (너굴의 한마디) */
+.stAlert {
+    border-radius: var(--border-radius);
+    border: 1px solid #A9D5A9;
+    background-color: #F1F8F1;
+    color: var(--text-color) !important; /* 알림창 내부 텍스트 색상 강제 */
+}
+
+/* 버튼 */
+.stButton>button {
+    font-weight: 700;
+    border-radius: var(--border-radius);
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    transition: all 0.2s ease;
+}
+
+.stButton>button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}

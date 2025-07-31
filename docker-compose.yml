@@ -5,10 +5,12 @@ services:
     build: .
     container_name: cointradesystem
     env_file:
-      - ./.env
+      - .env
     environment:
       PYTHONPATH: /usr/src/app
       PYTHONUNBUFFERED: 1
+    volumes:
+      - ./setting.csv:/usr/src/app/setting.csv
     depends_on:
       mariadb:
         condition: service_healthy
@@ -17,22 +19,37 @@ services:
   mariadb:
     image: mariadb:10.6
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER}", "-ptest1234"]
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "3307:3306"
-    container_name: mariadb
     volumes:
       - ./db/conf.d:/etc/mysql/conf.d
       - ./db/data:/var/lib/mysql
       - ./db/initdb.d:/docker-entrypoint-initdb.d
     environment:
       TZ: Asia/Seoul
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
       MARIADB_USER: ${DB_USER}
-      MARIADB_PASSWORD: test1234
-      MARIADB_ROOT_PASSWORD: test1234
+      MARIADB_PASSWORD: ${DB_PASSWORD}
       MARIADB_DATABASE: ${DB_NAME}
+    restart: always
+
+  streamlit:
+    build: .
+    container_name: streamlit_dashboard
+    env_file:
+      - .env
+    environment:
+      PYTHONPATH: /usr/src/app
+    ports:
+      - "8501:8501"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: >
+      streamlit run streamlit_app/app.py 
+      --server.port 8501 
+      --server.address 0.0.0.0
+    depends_on:
+      - cointradesystem
     restart: always

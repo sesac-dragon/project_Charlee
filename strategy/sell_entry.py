@@ -41,4 +41,7 @@ def run_sell_entry_flow(setting_df: pd.DataFrame, sell_log_df: pd.DataFrame) -> 
     
     print(f"[Flow] 현재 보유 코인: {list(holdings.keys())}")
     sell_orders_df = generate_sell_orders(setting_df, holdings, sell_log_df)
+    print(f"[Flow] 생성된 매도 주문: {len(sell_orders_df)}건")
+    if not sell_orders_df.empty:
+        print(sell_orders_df.to_string())
     return sell_orders_df
